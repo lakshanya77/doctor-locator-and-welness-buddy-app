@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wellness Buddy</title>
+
+  <!-- Swiper CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+  />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+      scroll-behavior: smooth;
+    }
+    header {
+      background-color: #ff6f61;
+      color: white;
+      padding: 1.5em;
+      text-align: center;
+      font-size: 1.4em;
+    }
+    nav {
+      background: #ff8a65;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background: #ff7043;
+      border-radius: 8px;
+      margin: 5px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      background: #bf360c;
+    }
+    section {
+      padding: 20px;
+      background-color: #fff3e0;
+      margin: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    section:hover {
+      transform: translateY(-5px);
+    }
+    #map {
+      height: 80vh;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    h2 {
+      color: #e65100;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ef9a9a;
+    }
+    img.food {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .tip-box {
+      background: #ffe082;
+      padding: 15px;
+      border-left: 6px solid #ffca28;
+      margin: 12px 0;
+      font-size: 1.1em;
+    }
+    .swipe-up {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+      animation: bounce 2s infinite;
+      color: #bf360c;
+      font-weight: bold;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Swiper slider styles */
+    .swiper {
+      width: 100%;
+      height: 220px;
+      margin: 20px 0;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      background: #fff3e0;
+    }
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .swiper-slide img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wellness Buddy</h1>
+    <p>Find Doctors, Calculate BMI & Age, Explore Diets!</p>
+  </header>
+
+  <nav>
+    <a href="#doctor-locator">Doctor Locator</a>
+    <a href="#bmi-calculator">BMI</a>
+    <a href="#age-calculator">Age</a>
+    <a href="#diet-chart">Diet Chart</a>
+    <a href="#diet-slider">Diet Images</a>
+    <a href="#tips">Health Tips</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="swipe-up">⬆️ Swipe Up ⬆️</div>
+
+  <!-- Doctor Locator with Google Maps -->
+  <section id="doctor-locator">
+    <h2>Nearby Doctors</h2>
+    <div id="map">Loading map...</div>
+  </section>
+
+  <!-- BMI Calculator -->
+  <section id="bmi-calculator">
+    <h2>BMI Calculator</h2>
+    <label>Height (cm): <input type="number" id="height" /></label><br /><br />
+    <label>Weight (kg): <input type="number" id="weight" /></label><br /><br />
+    <button onclick="calculateBMI()">Calculate BMI</button>
+    <p id="bmi-result"></p>
+  </section>
+
+  <!-- Age Calculator -->
+  <section id="age-calculator">
+    <h2>Age Calculator</h2>
+    <label>Date of Birth: <input type="date" id="dob" /></label><br /><br />
+    <button onclick="calculateAge()">Calculate Age</button>
+    <p id="age-result"></p>
+  </section>
+
+  <!-- Diet Chart Table -->
+  <section id="diet-chart">
+    <h2>Diet Chart - Nutritional Table</h2>
+    <table>
+      <tr>
+        <th>Food Item</th>
+        <th>Calories</th>
+        <th>Protein (g)</th>
+        <th>Fat (g)</th>
+        <th>Carbs (g)</th>
+        <th>Image</th>
+      </tr>
+    </table>
+  </section>
+
+  <!-- Swipeable Diet Image Slider -->
+  <section id="diet-slider">
+    <h2>Swipeable Diet Images</h2>
+    <div class="swiper">
+      <div class="swiper-wrapper" id="swiper-wrapper">
+        <!-- Slides inserted by JS -->
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
+
+  <!-- Health Tips -->
+  <section id="tips">
+    <h2>Healthy Living Tips</h2>
+    <div class="tip-box">✅ Drink at least 2 liters of water daily.</div>
+    <div class="tip-box">✅ Include more vegetables and fruits in your meals.</div>
+    <div class="tip-box">✅ Sleep at least 7–8 hours every night.</div>
+    <div class="tip-box">✅ Reduce junk food and sugar intake.</div>
+    <div class="tip-box">✅ Walk or exercise at least 30 mins daily.</div>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact">
+    <h2>Contact & Feedback</h2>
+    <form>
+      <label>Name: <input type="text" name="name" required /></label><br /><br />
+      <label>Email: <input type="email" name="email" required /></label><br /><br />
+      <label>Message:<br />
+        <textarea name="message" rows="4" cols="50"></textarea>
+      </label><br /><br />
+      <button type="submit">Submit</button>
+    </form>
+  </section>
+
+  <!-- Scripts -->
+
+  <!-- Google Maps API -->
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"
+  ></script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+  <script>
+    // Initialize Google Map with nearby doctors
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 13.0827, lng: 80.2707 }, // Chennai coordinates
+        zoom: 14,
+      });
+
+      const service = new google.maps.places.PlacesService(map);
+      const request = {
+        location: map.getCenter(),
+        radius: '3000',
+        type: ['doctor'],
+      };
+
+      service.nearbySearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          results.forEach((place) => {
+            const marker = new google.maps.Marker({
+              map,
+              position: place.geometry.location,
+              title: place.name,
+            });
+            const info = new google.maps.InfoWindow({
+              content: `<strong>${place.name}</strong><br>${place.vicinity}`,
+            });
+            marker.addListener("click", () => info.open(map, marker));
+          });
+        } else {
+          document.getElementById("map").innerText =
+            "Sorry, no doctor data available.";
+        }
+      });
+    }
+
+    // BMI Calculator
+    function calculateBMI() {
+      const height = document.getElementById("height").value / 100;
+      const weight = document.getElementById("weight").value;
+      if (height && weight) {
+        const bmi = weight / (height * height);
+        document.getElementById("bmi-result").innerText = `Your BMI is ${bmi.toFixed(2)}`;
+      } else {
+        document.getElementById("bmi-result").innerText = "Please enter height and weight.";
+      }
+    }
+
+    // Age Calculator
+    function calculateAge() {
+      const dobInput = document.getElementById("dob").value;
+      if (!dobInput) {
+        document.getElementById("age-result").innerText = "Please select your date of birth.";
+        return;
+      }
+      const dob = new Date(dobInput);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      document.getElementById("age-result").innerText = `Your age is ${age} years.`;
+    }
+
+    // Generate diet chart with 100+ food items (random values)
+    const table = document.querySelector("#diet-chart table");
+    const foodImages = [
+      'https://source.unsplash.com/80x80/?apple',
+      'https://source.unsplash.com/80x80/?banana',
+      'https://source.unsplash.com/80x80/?salad',
+      'https://source.unsplash.com/80x80/?bread',
+      'https://source.unsplash.com/80x80/?milk',
+      'https://source.unsplash.com/80x80/?nuts',
+      'https://source.unsplash.com/80x80/?vegetable',
+      'https://source.unsplash.com/80x80/?fruit',
+      'https://source.unsplash.com/80x80/?egg',
+      'https://source.unsplash.com/80x80/?chicken',
+      'https://source.unsplash.com/80x80/?juice',
+      'https://source.unsplash.com/80x80/?smoothie'
+    ];
+
+    for (let i = 1; i <= 120; i++) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>Food ${i}</td>
+        <td>${Math.floor(Math.random() * 300)}</td>
+        <td>${(Math.random() * 20).toFixed(1)}</td>
+        <td>${(Math.random() * 15).toFixed(1)}</td>
+        <td>${(Math.random() * 50).toFixed(1)}</td>
+        <td><img class="food" src="${foodImages[i % foodImages.length]}" alt="Food ${i}" /></td>
+      `;
+      table.appendChild(row);
+    }
+
+    // Initialize Swiper slider for diet images
+    const swiperWrapper = document.getElementById('swiper-wrapper');
+
+    const dietSliderImages = [
+      'https://source.unsplash.com/300x300/?apple',
+      'https://source.unsplash.com/300x300/?banana',
+      'https://source.unsplash.com/300x300/?salad',
+      'https://source.unsplash.com/300x300/?bread',
+      'https://source.unsplash.com/300x300/?milk',
+      'https://source.unsplash.com/300x300/?nuts',
+      'https://source.unsplash.com/300x300/?vegetable',
+      'https://source.unsplash.com/300x300/?fruit',
+      'https://source.unsplash.com/300x300/?egg',
+      'https://source.unsplash.com/300x300/?chicken',
+      'https://source.unsplash.com/300x300/?juice',
+      'https://source.unsplash.com/300x300/?smoothie'
+    ];
+
+    dietSliderImages.forEach((url, index) => {
+      const slide = document.createElement('div');
+      slide.classList.add('swiper-slide');
+      slide.innerHTML = `<img src="${url}" alt="Food ${index + 1}" />`;
+      swiperWrapper.appendChild(slide);
+    });
+
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      autoplay: {
+        delay: 3500,
+      },
+    });
+  </script>
+
+  <footer style="text-align:center; padding: 20px; font-weight:bold; color:#bf360c;">
+    Created by Lakshanya
+  </footer>
+</body>
+</html>
